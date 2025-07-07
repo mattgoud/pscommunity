@@ -13,10 +13,29 @@ class TopContributorsController extends FrameworkBundleAdminController
      */
     public function index(): Response
     {
+
         $contributors = [
-            ['name' => 'Alice', 'contributions' => 120],
-            ['name' => 'Bob', 'contributions' => 95],
-            ['name' => 'Charlie', 'contributions' => 87],
+            [
+                'rank' => 1,
+                'avatar' => 'https://picsum.photos/id/823/200',
+                'name' => 'Alice',
+                'contributions' => 120,
+                'profile_url' => 'https://picsum.photos/id/823/200',
+            ],
+            [
+                'rank' => 2,
+                'avatar' => 'https://picsum.photos/id/823/200',
+                'name' => 'Bob',
+                'contributions' => 95,
+                'profile_url' => 'https://picsum.photos/id/823/200',
+            ],
+            [
+                'rank' => 3,
+                'avatar' => 'https://picsum.photos/id/823/200',
+                'name' => 'Charlie',
+                'contributions' => 87,
+                'profile_url' => 'https://picsum.photos/id/823/200',
+            ],
         ];
 
         return $this->render('@Modules/pscommunity/views/templates/admin/top_contributors.html.twig', [

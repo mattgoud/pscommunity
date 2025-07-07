@@ -1,16 +1,77 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="/modules/pscommunity/assets/css/wall_of_fame.css">
+{% endblock %}
+
 {% block content %}
   <div class="card">
     <div class="card-header">
-      <h3 class="card-header-title">Top Contributors</h3>
+      <h2 class="card-header-title">MEET our community Heroes</h2>
+      <p>
+        From day one, PrestaShop has thrived as an open-source platform powered by a talented community of developers, merchants, and contributors.
+        We all work together to improve and support the scalability of the PrestaShop e-commerce platform.
+        By remaining the main contributors to its development, PrestaShop ensures long-term sustainability for everyone in the ecosystem.
+        The project grows with each contribution, and with each contribution our contributors’ expertise grows. Take a look at our community.
+      </p>
+      <div class="contrib-kpis__container">
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value">16,723</span>
+          <span class="contrib-kpis__label">Contribs by PrestaShop</span>
+        </div>
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value">87%</span>
+          <span class="contrib-kpis__label">Contribs by PrestaShop</span>
+        </div>
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value">13%</span>
+          <span class="contrib-kpis__label">Contribs by Community</span>
+        </div>
+      </div>
     </div>
     <div class="card-body">
-      <ul>
-        {% for contributor in contributors %}
-          <li>{{ contributor.name }} ({{ contributor.contributions }} contributions)</li>
-        {% endfor %}
-      </ul>
+    <section>
+      <h3>PrestaShop Project’s top contributors</h3>
+      <div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Rank</th>
+              <th>Avatar</th>
+              <th>Name</th>
+              <th>Contribs</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for contributor in contributors %}
+              <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ contributor.rank }}</td>
+                <td>
+                  {% if contributor.avatar %}
+                    <img src="{{ contributor.avatar }}" alt="{{ contributor.name }}" width="32" height="32" style="border-radius:50%;">
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td>{{ contributor.name }}</td>
+                <td>{{ contributor.contributions }}</td>
+                <td>
+                  {% if contributor.profile_url %}
+                    <a href="{{ contributor.profile_url }}" target="_blank" class="btn btn-sm btn-primary">View Profile</a>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
     </div>
   </div>
 {% endblock %}
