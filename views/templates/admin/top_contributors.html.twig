@@ -1,0 +1,16 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-header-title">Top Contributors</h3>
+    </div>
+    <div class="card-body">
+      <ul>
+        {% for contributor in contributors %}
+          <li>{{ contributor.name }} ({{ contributor.contributions }} contributions)</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

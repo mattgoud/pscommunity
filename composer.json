@@ -1,0 +1,19 @@
+{
+  "name": "prestashop/pscommunity",
+  "description": "Community Wall of Fame for PrestaShop",
+  "type": "prestashop-module",
+  "license": "AFL-3.0",
+  "autoload": {
+    "psr-4": {
+      "PsCommunity\\": "src/"
+    }
+  },
+  "extra": {
+    "symfony": {
+      "routes": {
+        "pscommunity": "config/routes.yml"
+      }
+    }
+  },
+  "require": {}
+}

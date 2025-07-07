@@ -1,0 +1,7 @@
+pscommunity_top_contributors:
+  path: /pscommunity/top-contributors
+  methods: [GET]
+  defaults:
+    _controller: 'PsCommunity\Controller\Admin\TopContributorsController::index'
+    _legacy_controller: 'AdminPsCommunity'
+    _legacy_link: 'AdminPsCommunity'
