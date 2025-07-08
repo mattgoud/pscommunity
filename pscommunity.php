@@ -11,13 +11,13 @@ class PsCommunity extends Module
         $this->name = 'pscommunity';
         $this->tab = 'administration';
         $this->version = '1.0.0';
-        $this->author = 'PrestaCommunity';
+        $this->author = 'Prestashop SA';
         $this->need_instance = 0;
 
         parent::__construct();
 
-        $this->displayName = $this->l('Community Wall of Fame');
-        $this->description = $this->l('Displays top GitHub contributors.');
+        $this->displayName = $this->l('Wall of Fame');
+        $this->description = $this->l('Displays and highlights contributors to the PrestaShop open source project');
     }
 
     public function install()
