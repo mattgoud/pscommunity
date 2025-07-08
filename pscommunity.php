@@ -32,27 +32,46 @@ class PsCommunity extends Module
             && $this->unregisterTab();
     }
 
-    private function registerTab()
-    {
-        $tab = new Tab();
-        $tab->active = 1;
-        $tab->class_name = 'AdminPsCommunity';
-        $tab->name = [];
-        foreach (Language::getLanguages() as $lang) {
-            $tab->name[$lang['id_lang']] = 'Community';
-        }
-        $tab->id_parent = (int) Tab::getIdFromClassName('IMPROVE');
-        $tab->module = $this->name;
-
-        return $tab->add();
+private function registerTab()
+{
+    $parentTab = new Tab();
+    $parentTab->active = 1;
+    $parentTab->class_name = 'AdminPsCommunityParent';
+    $parentTab->id_parent = 0;
+    $parentTab->module = $this->name;
+    foreach (Language::getLanguages() as $lang) {
+        $parentTab->name[$lang['id_lang']] = $this->l('Community');
     }
+    $parentTab->add();
+
+    $childTab = new Tab();
+    $childTab->active = 1;
+    $childTab->class_name = 'AdminPsCommunityTopContributors';
+    $childTab->id_parent = (int) Tab::getIdFromClassName('AdminPsCommunityParent');
+    if (property_exists($childTab, 'route_name')) {
+        $childTab->route_name = 'pscommunity_top_contributors';
+    }
+    $childTab->module = $this->name;
+    foreach (Language::getLanguages() as $lang) {
+        $childTab->name[$lang['id_lang']] = $this->l('Top Contributors');
+    }
+    $childTab->add();
+
+    return true;
+}
+
 
     private function unregisterTab()
     {
-        $idTab = (int) Tab::getIdFromClassName('AdminPsCommunity');
-        if ($idTab) {
-            $tab = new Tab($idTab);
-            return $tab->delete();
+        $idChildTab = (int) Tab::getIdFromClassName('AdminPsCommunityTopContributors');
+        if ($idChildTab) {
+            $tab = new Tab($idChildTab);
+            $tab->delete();
+        }
+        $idParentTab = (int) Tab::getIdFromClassName('AdminPsCommunityParent');
+        if ($idParentTab) {
+            $tab = new Tab($idParentTab);
+            $tab->delete();
         }
         return true;
     }
