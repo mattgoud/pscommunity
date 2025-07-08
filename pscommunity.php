@@ -53,7 +53,7 @@ private function registerTab()
     }
     $childTab->module = $this->name;
     foreach (Language::getLanguages() as $lang) {
-        $childTab->name[$lang['id_lang']] = $this->l('Top Contributors');
+        $childTab->name[$lang['id_lang']] = $this->l('Wall of Fame');
     }
     $childTab->add();
 

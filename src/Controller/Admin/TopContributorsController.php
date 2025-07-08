@@ -20,21 +20,18 @@ class TopContributorsController extends FrameworkBundleAdminController
                 'avatar' => 'https://picsum.photos/id/823/200',
                 'name' => 'Alice',
                 'contributions' => 120,
-                'profile_url' => 'https://picsum.photos/id/823/200',
             ],
             [
                 'rank' => 2,
                 'avatar' => 'https://picsum.photos/id/823/200',
                 'name' => 'Bob',
                 'contributions' => 95,
-                'profile_url' => 'https://picsum.photos/id/823/200',
             ],
             [
                 'rank' => 3,
                 'avatar' => 'https://picsum.photos/id/823/200',
                 'name' => 'Charlie',
                 'contributions' => 87,
-                'profile_url' => 'https://picsum.photos/id/823/200',
             ],
         ];
 

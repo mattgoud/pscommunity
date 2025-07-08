@@ -1,19 +1,30 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <header class="wof-header">
+    <h1 class="puik-brand-jumbotron wof-title">MEET our community Heroes</h1>
+    <p class="puik-body-default wof-description">
+      From day one, PrestaShop has thrived as an open-source platform powered by a talented community of developers, merchants, and contributors.
+      We all work together to improve and support the scalability of the PrestaShop e-commerce platform.
+      By remaining the main contributors to its development, PrestaShop ensures long-term sustainability for everyone in the ecosystem.
+      The project grows with each contribution, and with each contribution our contributors’ expertise grows.
+      Take a look at our community.
+    </p>
+    <div class="contrib-kpis__container">
+      <div class="contrib-kpis__item">
+        <span class="contrib-kpis__value puik-brand-h1">16,723</span>
+        <span class="contrib-kpis__label puik-body-default">Contribs by PrestaShop</span>
+      </div>
+      <div class="contrib-kpis__item">
+        <span class="contrib-kpis__value puik-brand-h1">87%</span>
+        <span class="contrib-kpis__label puik-body-default">Contribs by PrestaShop</span>
+      </div>
+      <div class="contrib-kpis__item">
+        <span class="contrib-kpis__value puik-brand-h1">13%</span>
+        <span class="contrib-kpis__label puik-body-default">Contribs by Community</span>
+      </div>
     </div>
   </header>
 
@@ -21,65 +32,43 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+.wof-title {
+  text-transform: uppercase;
   text-align: center;
-  margin-top: 2rem;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.wof-description {
+  text-align: center;
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.wof-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background-color: #1D1D1B;
+  padding: 1rem;
 }
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+@media (min-width: 768px) {
+  .wof-header {
+    padding: 4rem;
   }
+}
+.wof-header * {
+  color: white;
+}
+.contrib-kpis__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.contrib-kpis__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
