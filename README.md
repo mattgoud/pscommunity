@@ -4,7 +4,7 @@ Prestashop Community module
 
 ## Description
 
-Adds community tools like GitHub top contributors in the back-office (Wall of Fame).
+Adds community tools like GitHub top contributors in the back-office (**Wall of Fame**).
 
 ## Initialization
 
