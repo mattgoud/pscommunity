@@ -16,7 +16,8 @@
     "@prestashopcorp/puik-components": "^2.6.0",
     "@prestashopcorp/puik-theme": "^2.6.0",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue3-carousel": "^0.16.0"
   },
   "devDependencies": {
     "@prestashopcorp/puik-resolver": "^7.0.0",
