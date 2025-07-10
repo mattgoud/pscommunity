@@ -12,7 +12,6 @@ declare module 'vue' {
     PuikButton: typeof import('@prestashopcorp/puik-components')['PuikButton']
     PuikCard: typeof import('@prestashopcorp/puik-components')['PuikCard']
     PuikIcon: typeof import('@prestashopcorp/puik-components')['PuikIcon']
-    PuikPagination: typeof import('@prestashopcorp/puik-components')['PuikPagination']
     PuikTable: typeof import('@prestashopcorp/puik-components')['PuikTable']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
