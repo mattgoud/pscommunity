@@ -3,7 +3,7 @@ import 'vue3-carousel/carousel.css'
 
 import { ref, onMounted } from 'vue'
 import { type PuikTableHeader } from '@prestashopcorp/puik-components'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import { Carousel, Slide, Navigation } from 'vue3-carousel'
 
 interface Contributor {
   rank: number
@@ -84,22 +84,47 @@ const carousel_config = {
   },
 }
 
-const images = Array.from({ length: 10 }, (_, index) => ({
-  id: index + 1,
-  url: `https://picsum.photos/seed/${Math.random()}/800/600`,
-}))
-
 const contributors = ref<Contributor[]>([])
 const newContributors = ref([])
+const topCompanies = ref<string | null>()
+const contributorsData = ref([])
+const totalContribs = ref()
+const prestaContribs = ref()
 
 onMounted(async () => {
   try {
     const response = await fetch('https://contributors.prestashop-project.org/newcontributors.json')
-    if (!response.ok) throw new Error('Erreur de chargement')
+    if (!response.ok) throw new Error('Error loading new contributors')
     const data = await response.json()
     newContributors.value = data
   } catch (error) {
-    console.error('Erreur :', error)
+    console.error('Error :', error)
+  }
+
+  try {
+    const response = await fetch('https://contributors.prestashop-project.org/topcompanies.json')
+    if (!response.ok) throw new Error('Error loading top companies')
+    const data = await response.json()
+    topCompanies.value = data
+
+    const values = Object.values(data)
+    totalContribs.value = values.reduce(
+      (sum: number, val) => sum + (typeof val === 'number' ? val : 0),
+      0,
+    )
+
+    prestaContribs.value = data['prestashop.com'] ?? 0
+  } catch (error) {
+    console.error('Error loading top companies:', error)
+  }
+
+  try {
+    const response = await fetch('https://contributors.prestashop-project.org/contributors.js')
+    if (!response.ok) throw new Error('Error loading contributors data')
+    const data = await response.json()
+    contributorsData.value = data
+  } catch (error) {
+    console.error('Error :', error)
   }
 
   const el = document.getElementById('vue-app')
@@ -110,131 +135,202 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main>
-    <section class="wof-section wof-top-contributors__section">
-      <h2 class="puik-h1">PrestaShop Project’s top contributors</h2>
-      <div class="wof-top-contributors__cards">
-        <puik-card class="wof-top-contributors__card">
-          <h3 class="puik-h2">🚀 Top companies</h3>
-          <p class="puik-body-default">
-            Meet the top companies who are helping us strengthen PrestaShop.
-          </p>
-          <puik-table
-            v-if="contributors.length"
-            v-model:selection="selection"
-            :headers="headers"
-            :items="contributors"
-            :expandable="expandable"
-            :selectable="selectable"
-            :searchBar="searchBar"
-            :searchFromServer="searchFromServer"
-            :sortFromServer="sortFromServer"
-            :fullWidth="fullWidth"
-            :stickyFirstCol="stickyFirstCol"
-            :stickyLastCol="stickyLastCol"
-          >
-            <template #item-avatar="{ item }">
-              <puik-avatar type="photo" :src="item.avatar" />
-            </template>
-            <template #item-actions="{ item }">
-              <puik-button variant="text" right-icon="visibility" aria-label="view profile" />
-            </template>
-          </puik-table>
-        </puik-card>
-        <puik-card class="wof-top-contributors__card">
-          <h3 class="puik-h2">🔥 Top contributors</h3>
-          <p class="puik-body-default">These experts spent hours improving PrestaShop's quality.</p>
-          <puik-table
-            v-if="contributors.length"
-            v-model:selection="selection"
-            :headers="headers"
-            :items="contributors"
-            :expandable="expandable"
-            :selectable="selectable"
-            :searchBar="searchBar"
-            :searchFromServer="searchFromServer"
-            :sortFromServer="sortFromServer"
-            :fullWidth="fullWidth"
-            :stickyFirstCol="stickyFirstCol"
-            :stickyLastCol="stickyLastCol"
-          >
-            <template #item-avatar="{ item }">
-              <puik-avatar type="photo" :src="item.avatar" />
-            </template>
-            <template #item-actions="{ item }">
-              <puik-button variant="text" right-icon="visibility" aria-label="view profile" />
-            </template>
-          </puik-table>
-        </puik-card>
+  <div>
+    <header class="wof-header">
+      <h1 class="puik-brand-jumbotron wof-title">MEET our community Heroes</h1>
+      <p class="puik-body-default wof-description">
+        From day one, PrestaShop has thrived as an open-source platform powered by a talented
+        community of developers, merchants, and contributors. We all work together to improve and
+        support the scalability of the PrestaShop e-commerce platform. By remaining the main
+        contributors to its development, PrestaShop ensures long-term sustainability for everyone in
+        the ecosystem. The project grows with each contribution, and with each contribution our
+        contributors’ expertise grows. Take a look at our community.
+      </p>
+      <div class="contrib-kpis__container">
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value puik-brand-h1">{{ totalContribs }}</span>
+          <span class="contrib-kpis__label puik-body-default">Total Contributions</span>
+        </div>
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value puik-brand-h1">
+            {{ Math.round((prestaContribs / totalContribs) * 100) }}%
+          </span>
+          <span class="contrib-kpis__label puik-body-default">Contribs by PrestaShop</span>
+        </div>
+        <div class="contrib-kpis__item">
+          <span class="contrib-kpis__value puik-brand-h1">
+            {{ Math.round(100 - (prestaContribs / totalContribs) * 100) }}%
+          </span>
+          <span class="contrib-kpis__label puik-body-default">Contribs by Community</span>
+        </div>
       </div>
-    </section>
-    <section class="wof-section wof-new-contributors__section">
-      <div>
-        <h2 class="puik-h2">👋 Say hello to our new contributors</h2>
-        <p class="puik-body-default">
-          Fresh commits, fresh faces. Meet the contributors who just joined!
-        </p>
-      </div>
-      <Carousel v-bind="carousel_config">
-        <Slide v-for="(newContributor, index) in newContributors" :key="index">
-          <puik-card class="wof-new-contributors__card">
-            <div>
-              <img
-                class="wof-new-contributors__img"
-                :src="`https://picsum.photos/seed/1/800/600`"
-                :alt="newContributor"
-              />
-              <h3 class="puik-h3">{{ newContributor }}</h3>
-              <p class="puik-body-default">{{ newContributor }} contributions</p>
-            </div>
+    </header>
+    <main>
+      <section class="wof-section wof-top-contributors__section">
+        <h2 class="puik-h1">PrestaShop Project’s top contributors</h2>
+        <div class="wof-top-contributors__cards">
+          <puik-card class="wof-top-contributors__card">
+            <h3 class="puik-h2">🚀 Top companies</h3>
+            <p class="puik-body-default">
+              Meet the top companies who are helping us strengthen PrestaShop.
+            </p>
+            <puik-table
+              v-if="contributors.length"
+              v-model:selection="selection"
+              :headers="headers"
+              :items="contributors"
+              :expandable="expandable"
+              :selectable="selectable"
+              :searchBar="searchBar"
+              :searchFromServer="searchFromServer"
+              :sortFromServer="sortFromServer"
+              :fullWidth="fullWidth"
+              :stickyFirstCol="stickyFirstCol"
+              :stickyLastCol="stickyLastCol"
+            >
+              <template #item-avatar="{ item }">
+                <puik-avatar type="photo" :src="item.avatar" />
+              </template>
+              <template #item-actions="{ item }">
+                <puik-button variant="text" right-icon="visibility" aria-label="view profile" />
+              </template>
+            </puik-table>
           </puik-card>
-        </Slide>
-        <template #addons>
-          <div class="wof-carousel__nav-container">
-            <Navigation>
-              <template #prev>
-                <puik-icon icon="keyboard_arrow_left" />
+          <puik-card class="wof-top-contributors__card">
+            <h3 class="puik-h2">🔥 Top contributors</h3>
+            <p class="puik-body-default">
+              These experts spent hours improving PrestaShop's quality.
+            </p>
+            <puik-table
+              v-if="contributors.length"
+              v-model:selection="selection"
+              :headers="headers"
+              :items="contributors"
+              :expandable="expandable"
+              :selectable="selectable"
+              :searchBar="searchBar"
+              :searchFromServer="searchFromServer"
+              :sortFromServer="sortFromServer"
+              :fullWidth="fullWidth"
+              :stickyFirstCol="stickyFirstCol"
+              :stickyLastCol="stickyLastCol"
+            >
+              <template #item-avatar="{ item }">
+                <puik-avatar type="photo" :src="item.avatar" />
               </template>
-              <template #next>
-                <puik-icon icon="keyboard_arrow_right" />
+              <template #item-actions="{ item }">
+                <puik-button variant="text" right-icon="visibility" aria-label="view profile" />
               </template>
-            </Navigation>
-          </div>
-        </template>
-      </Carousel>
-    </section>
-    <section class="wof-section wof-wall__section">
-      <div>
-        <h2 class="puik-h2">🏆 PrestaShop Project’s Wall of fame</h2>
-        <p class="puik-body-default">
-          The PrestaShop Wall of Fame: built by the best, committed to the core.
-        </p>
-      </div>
-    </section>
-    <section class="wof-section wof-contribute__section">
-      <div class="wof-contribute__content">
-        <h2 class="puik-h2">✨ How to contribute?</h2>
-        <p class="puik-body-default">
-          Join the open-source movement by contributing to PrestaShop on GitHub—whether it’s code,
-          documentation, or ideas. Every contribution counts!
-        </p>
-      </div>
-      <div class="wof-contribute_links">
-        <puik-button
-          variant="primary"
-          href="https://github.com/PrestaShop/PrestaShop/blob/develop/CONTRIBUTING.md"
-        >
-          Contribute
-        </puik-button>
-        <puik-button variant="secondary" href="https://www.prestashop-project.org/slack/">
-          Join Slack
-        </puik-button>
-      </div>
-    </section>
-  </main>
+            </puik-table>
+          </puik-card>
+        </div>
+      </section>
+      <section class="wof-section wof-new-contributors__section">
+        <div>
+          <h2 class="puik-h2">👋 Say hello to our new contributors</h2>
+          <p class="puik-body-default">
+            Fresh commits, fresh faces. Meet the contributors who just joined!
+          </p>
+        </div>
+        <Carousel v-bind="carousel_config">
+          <Slide v-for="(newContributor, index) in newContributors" :key="index">
+            <puik-card class="wof-new-contributors__card">
+              <div>
+                <img
+                  class="wof-new-contributors__img"
+                  :src="`https://picsum.photos/seed/1/800/600`"
+                  :alt="newContributor"
+                />
+                <h3 class="puik-h3">{{ newContributor }}</h3>
+                <p class="puik-body-default">{{ newContributor }} contributions</p>
+              </div>
+            </puik-card>
+          </Slide>
+          <template #addons>
+            <div class="wof-carousel__nav-container">
+              <Navigation>
+                <template #prev>
+                  <puik-icon icon="keyboard_arrow_left" />
+                </template>
+                <template #next>
+                  <puik-icon icon="keyboard_arrow_right" />
+                </template>
+              </Navigation>
+            </div>
+          </template>
+        </Carousel>
+      </section>
+      <section class="wof-section wof-wall__section">
+        <div>
+          <h2 class="puik-h2">🏆 PrestaShop Project’s Wall of fame</h2>
+          <p class="puik-body-default">
+            The PrestaShop Wall of Fame: built by the best, committed to the core.
+          </p>
+        </div>
+      </section>
+      <section class="wof-section wof-contribute__section">
+        <div class="wof-contribute__content">
+          <h2 class="puik-h2">✨ How to contribute?</h2>
+          <p class="puik-body-default">
+            Join the open-source movement by contributing to PrestaShop on GitHub—whether it’s code,
+            documentation, or ideas. Every contribution counts!
+          </p>
+        </div>
+        <div class="wof-contribute_links">
+          <puik-button
+            variant="primary"
+            href="https://github.com/PrestaShop/PrestaShop/blob/develop/CONTRIBUTING.md"
+          >
+            Contribute
+          </puik-button>
+          <puik-button variant="secondary" href="https://www.prestashop-project.org/slack/">
+            Join Slack
+          </puik-button>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
 
 <style>
+.wof-title {
+  text-transform: uppercase;
+  text-align: center;
+}
+.wof-description {
+  text-align: center;
+}
+.wof-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background-color: #1d1d1b;
+  padding: 1rem;
+}
+@media (min-width: 768px) {
+  .wof-header {
+    padding: 4rem;
+  }
+}
+.wof-header * {
+  color: white;
+}
+.contrib-kpis__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.contrib-kpis__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
+}
 .wof-section {
   padding: 1rem;
   display: flex;
@@ -260,8 +356,6 @@ onMounted(async () => {
 }
 .wof-new-contributors__section {
   background-color: #a4dbe8;
-}
-.wof-wall__section {
 }
 .wof-contribute__section {
   justify-content: center;
